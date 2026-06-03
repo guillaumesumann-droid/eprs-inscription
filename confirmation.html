@@ -47,16 +47,11 @@
       </div>
 
       <h1 class="confirm-title">Demande envoy&#233;e ! &#127881;</h1>
-      <p class="confirm-subtitle" id="confirmSubtitle">Merci&nbsp;! L&#39;&#233;ducateur responsable vous contactera tr&#232;s prochainement.</p>
+      <p class="confirm-subtitle" id="confirmSubtitle">Merci&nbsp;! L&#39;&#233;ducateur responsable de votre enfant vous contactera tr&#232;s prochainement.</p>
 
       <div class="confirm-mutation-alert" id="confirmMutation" style="display:none">
-        &#9888;&#65039; <strong>Rappel &#8212; Date limite de mutation :</strong>
+        &#9888;&#65039; <strong>Rappel &#8212; Mutation :</strong>
         <span id="confirmMutationText"></span>
-        La date limite de d&#233;p&#244;t du dossier de mutation est le <strong>15 juillet 2026</strong>.
-        Pass&#233; le 15 juillet 2026, votre dossier sera trait&#233; en mutation hors d&#233;lai.
-        Cette proc&#233;dure est plus contraignante&#160;: elle n&#233;cessite l&#39;accord du club quitt&#233;
-        et est soumise &#224; validation par le District. Nous vous conseillons vivement
-        de d&#233;poser votre demande avant cette date.
       </div>
 
       <div class="confirm-steps" role="list">
@@ -64,7 +59,7 @@
           <div class="confirm-step-num" aria-hidden="true">1</div>
           <div>
             <strong>Licence FFF</strong><br>
-            <span id="confirmStep1Text">Vous recevrez un email de la FFF &#224; l&#39;adresse indiqu&#233;e pour valider la licence officielle de votre enfant.</span>
+            <span id="confirmStep1Text">Votre enfant recevra un email de la FFF.</span>
           </div>
         </div>
         <div class="confirm-step" role="listitem">
@@ -78,7 +73,7 @@
           <div class="confirm-step-num" aria-hidden="true">3</div>
           <div>
             <strong>Contact &#233;ducateur</strong><br>
-            L&#39;&#233;ducateur responsable de votre cat&#233;gorie vous contactera prochainement. N&#39;h&#233;sitez pas &#224; le contacter directement si vous n&#39;avez pas de nouvelles sous 48h.
+            L&#39;&#233;ducateur responsable vous contactera prochainement. N&#39;h&#233;sitez pas &#224; le contacter directement si vous n&#39;avez pas de nouvelles sous 48h.
           </div>
         </div>
       </div>
@@ -121,20 +116,16 @@
 
         // Message principal
         var subtitle = document.getElementById('confirmSubtitle');
-        if (senior && data.prenomJoueur) {
-          subtitle.textContent = "Merci " + data.prenomJoueur + " ! L'éducateur responsable vous contactera très prochainement.";
+        if (senior) {
+          subtitle.textContent = "Merci ! L'éducateur responsable vous contactera très prochainement.";
         } else {
           subtitle.textContent = "Merci ! L'éducateur responsable de votre enfant vous contactera très prochainement.";
         }
 
-        // Alerte mutation
-        if (data.categorie && MUTATION_CATS.indexOf(data.categorie) !== -1) {
+        // Alerte mutation (Senior uniquement)
+        if (senior && data.categorie && MUTATION_CATS.indexOf(data.categorie) !== -1) {
           var mutText = document.getElementById('confirmMutationText');
-          if (senior) {
-            mutText.innerHTML = "Vous êtes en catégorie <strong>" + data.categorie + "</strong>.";
-          } else {
-            mutText.innerHTML = "Votre enfant est en catégorie <strong>" + data.categorie + "</strong>.";
-          }
+          mutText.textContent = " Vous êtes en catégorie Senior. La date limite de dépôt du dossier de mutation est le 15 juillet 2026.";
           document.getElementById('confirmMutation').style.display = 'block';
         }
 
