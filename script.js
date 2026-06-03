@@ -5,6 +5,10 @@
 
 const FORMSPREE_ENDPOINT = "https://formspree.io/f/mykayywn";
 
+// 15 juillet 2025 à 23h59 heure de Paris (CEST = UTC+2)
+const MUTATION_DEADLINE = new Date('2025-07-15T23:59:00+02:00');
+let deadlinePassed = false;
+
 // ── Catégories par année de naissance (saison 2025/2026) ──
 const CATEGORIES = {
   2020: 'U7',  2019: 'U7',
@@ -61,6 +65,9 @@ document.addEventListener('DOMContentLoaded', function () {
       clearError('nomClub');
     }
   });
+
+  // Démarrage du compte à rebours
+  startCountdown();
 
   // Droit à l'image : mise à jour refus message + résumé en direct
   document.querySelectorAll('input[name="droit_image"]').forEach(function (r) {
@@ -127,6 +134,41 @@ function prevStep(n) {
   currentStep = n - 1;
   updateProgress(currentStep);
   window.scrollTo({ top: document.querySelector('.form-card').offsetTop - 20, behavior: 'smooth' });
+}
+
+// ── Compte à rebours ──
+function startCountdown() {
+  const timer   = document.getElementById('countdownTimer');
+  const expired = document.getElementById('countdownExpired');
+  const box     = document.getElementById('countdownBox');
+
+  function pad(n) { return String(n).padStart(2, '0'); }
+
+  function tick() {
+    const diff = MUTATION_DEADLINE - new Date();
+
+    if (diff <= 0) {
+      deadlinePassed = true;
+      timer.hidden   = true;
+      expired.hidden = false;
+      box.classList.add('countdown-box--expired');
+      return; // arrêt du timer
+    }
+
+    const days    = Math.floor(diff / 86400000);
+    const hours   = Math.floor((diff % 86400000) / 3600000);
+    const minutes = Math.floor((diff % 3600000)  / 60000);
+    const seconds = Math.floor((diff % 60000)    / 1000);
+
+    document.getElementById('cdDays').textContent    = pad(days);
+    document.getElementById('cdHours').textContent   = pad(hours);
+    document.getElementById('cdMinutes').textContent = pad(minutes);
+    document.getElementById('cdSeconds').textContent = pad(seconds);
+
+    setTimeout(tick, 1000);
+  }
+
+  tick();
 }
 
 // ── Adaptation étape 2 selon catégorie ──
@@ -210,10 +252,18 @@ function onDateChange() {
 
   // Alerte mutation
   if (MUTATION_CATEGORIES.includes(cat)) {
-    const sujet = isSenior ? 'Vous êtes' : 'Votre enfant est';
-    alert.innerHTML =
-      '⚠️ ' + sujet + ' en catégorie <strong>' + cat + '</strong>. ' +
-      'La date limite de mutation est le <strong>15 juillet 2025</strong>.';
+    if (deadlinePassed) {
+      const pronoun = isSenior ? 'vous êtes' : 'votre enfant est';
+      alert.innerHTML =
+        '🔴 Attention : ' + pronoun + ' en mutation hors délai. ' +
+        'La procédure nécessite l\'accord du club quitté et la validation du District. ' +
+        'Contactez Guillaume directement.';
+    } else {
+      const sujet = isSenior ? 'Vous êtes' : 'Votre enfant est';
+      alert.innerHTML =
+        '⚠️ ' + sujet + ' en catégorie <strong>' + cat + '</strong>. ' +
+        'La date limite de mutation est le <strong>15 juillet 2025</strong>.';
+    }
     alert.hidden = false;
   } else {
     alert.hidden = true;

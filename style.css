@@ -768,6 +768,85 @@ input.error, select.error, textarea.error {
 }
 
 /* ══════════════════════════════════
+   COMPTE À REBOURS MUTATION
+══════════════════════════════════ */
+.countdown-section { padding: 0.85rem 0 0; }
+.countdown-box {
+  background: #8b0000;
+  color: white;
+  border-radius: var(--radius);
+  padding: 1.25rem 1rem 1rem;
+  text-align: center;
+  transition: background 0.5s ease;
+}
+.countdown-box--expired { background: #3a3a3a; }
+
+.countdown-title {
+  font-family: 'Oswald', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: rgba(255,255,255,0.9);
+  margin-bottom: 0.9rem;
+}
+.countdown-timer {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 0.4rem;
+  margin-bottom: 0.75rem;
+}
+.countdown-unit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: rgba(0,0,0,0.35);
+  border-radius: 8px;
+  padding: 0.55rem 0.85rem;
+  min-width: 68px;
+}
+.countdown-value {
+  font-family: 'Oswald', sans-serif;
+  font-size: 2.3rem;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0.05em;
+  font-variant-numeric: tabular-nums;
+}
+.countdown-label {
+  font-size: 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: rgba(255,255,255,0.65);
+  margin-top: 0.3rem;
+}
+.countdown-sep {
+  font-family: 'Oswald', sans-serif;
+  font-size: 2rem;
+  font-weight: 700;
+  color: rgba(255,255,255,0.35);
+  padding-bottom: 0.55rem;
+  user-select: none;
+}
+.countdown-cats {
+  font-size: 0.78rem;
+  color: rgba(255,255,255,0.65);
+  letter-spacing: 0.1em;
+}
+.countdown-expired {
+  font-size: 0.95rem;
+  line-height: 1.65;
+  font-weight: 700;
+  padding: 0.25rem 0.5rem;
+}
+
+@media (max-width: 640px) {
+  .countdown-unit  { min-width: 52px; padding: 0.4rem 0.55rem; }
+  .countdown-value { font-size: 1.75rem; }
+  .countdown-sep   { font-size: 1.6rem; padding-bottom: 0.4rem; }
+}
+
+/* ══════════════════════════════════
    DROIT À L'IMAGE (étape 4)
 ══════════════════════════════════ */
 .image-rights-section {
