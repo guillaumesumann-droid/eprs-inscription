@@ -203,18 +203,19 @@
 
               <div class="field-group">
                 <label for="dateNaissance">Date de naissance <span class="req" aria-hidden="true">*</span></label>
-                <input type="date" id="dateNaissance" name="date_naissance" min="2008-01-01" max="2021-12-31" aria-required="true">
+                <input type="date" id="dateNaissance" name="date_naissance" max="2021-12-31" aria-required="true">
                 <div class="field-error" id="err_dateNaissance" role="alert"></div>
                 <div id="categoryDisplay" class="category-display" aria-live="polite" hidden>
                   <span class="category-badge" id="categoryBadge"></span>
                   <div class="mutation-alert" id="mutationAlert" hidden></div>
                   <!-- Message humoristique pour les Seniors nés en 1995 ou avant -->
                   <div class="veteran-humor" id="veteranHumor" hidden>
-                    🦴 Bienvenue chez les Seniors expérimentés !
-                    On est ravis de vous accueillir… et votre kiné aussi.
+                    🦴 Bienvenue chez les Seniors... expérimentés !
+                    On est ravis de vous accueillir... et votre kiné aussi.
                     Pensez à prévenir votre médecin, à prévoir du baume du tigre
                     et à ne pas oublier votre carnet de mutuelle.
                     On rigole — mais échauffez-vous bien quand même ! 💪
+                    ⚠️ Et comme tout le monde : date limite de mutation le 15 juillet 2026 !
                   </div>
                   <!-- Photo de la catégorie -->
                   <div class="cat-photo-wrapper" id="catPhotoWrapper">

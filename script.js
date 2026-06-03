@@ -18,7 +18,8 @@ const CATEGORIES = {
   2013: 'U15', 2012: 'U15',
   2011: 'U16',
   2010: 'U17',
-  // 2009 et avant → Senior (fallback dans onDateChange/getCategory)
+  2009: 'Senior', 2008: 'Senior',
+  // 2007 et avant → Senior (fallback dans onDateChange/getCategory)
 };
 
 // Photo associée à chaque catégorie
@@ -49,7 +50,7 @@ const EDUCATEURS = {
 };
 
 let currentStep = 1;
-let isSenior    = false; // true si catégorie Senior (né en 2008 ou avant)
+let isSenior    = false; // true si catégorie Senior (né en 2009 ou avant)
 
 // ── Init ──
 document.addEventListener('DOMContentLoaded', function () {
@@ -316,11 +317,6 @@ function onDateChange() {
     showError('dateNaissance', 'Cette date ne correspond à aucune catégorie. Contactez Guillaume directement.');
     return;
   }
-  if (year < 2008) {
-    display.hidden = true;
-    showError('dateNaissance', 'Cette date dépasse les catégories Senior. Contactez Guillaume directement.');
-    return;
-  }
 
   const cat = CATEGORIES[year] || 'Senior';
   isSenior = (cat === 'Senior');
@@ -387,9 +383,6 @@ function validateStep1() {
     const year = new Date(dateInput.value).getFullYear();
     if (year > 2021) {
       showError('dateNaissance', 'Cette date ne correspond à aucune catégorie. Contactez Guillaume directement.');
-      ok = false;
-    } else if (year < 2008) {
-      showError('dateNaissance', 'Cette date dépasse les catégories Senior. Contactez Guillaume directement.');
       ok = false;
     } else {
       clearError('dateNaissance');
