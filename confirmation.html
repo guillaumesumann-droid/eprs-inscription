@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Demande envoyée — EPRS Football</title>
+  <title>Demande envoy&#233;e &#8212; EPRS Football</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=Lato:ital,wght@0,300;0,400;0,700;1,400&display=swap" rel="stylesheet">
@@ -14,17 +14,23 @@
   <header class="site-header">
     <div class="container">
       <div class="logo-wrapper">
-        <svg class="logo-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Logo EPRS Football">
-          <circle cx="50" cy="50" r="48" fill="#1a3a6b"/>
-          <circle cx="50" cy="50" r="48" fill="none" stroke="rgba(255,255,255,0.25)" stroke-width="2"/>
-          <circle cx="50" cy="50" r="22" fill="#c0392b"/>
-          <text x="50" y="27" text-anchor="middle" fill="rgba(255,255,255,0.55)" font-family="Oswald,sans-serif" font-size="7" letter-spacing="1">ENTENTE</text>
-          <text x="50" y="58" text-anchor="middle" fill="white" font-family="Oswald,sans-serif" font-size="20" font-weight="700">EPRS</text>
-          <text x="50" y="72" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-family="Oswald,sans-serif" font-size="7.5" letter-spacing="1">FOOTBALL</text>
-        </svg>
+        <div class="logo-media">
+          <img src="images/logo.png"
+               class="logo-img"
+               alt="Logo EPRS Football"
+               onerror="this.style.display='none'; this.nextElementSibling.style.display='block'">
+          <svg class="logo-svg" style="display:none" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Logo EPRS Football">
+            <circle cx="50" cy="50" r="48" fill="#1a3a6b"/>
+            <circle cx="50" cy="50" r="48" fill="none" stroke="rgba(255,255,255,0.25)" stroke-width="2"/>
+            <circle cx="50" cy="50" r="22" fill="#c0392b"/>
+            <text x="50" y="27" text-anchor="middle" fill="rgba(255,255,255,0.55)" font-family="Oswald,sans-serif" font-size="7" letter-spacing="1">ENTENTE</text>
+            <text x="50" y="58" text-anchor="middle" fill="white" font-family="Oswald,sans-serif" font-size="20" font-weight="700">EPRS</text>
+            <text x="50" y="72" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-family="Oswald,sans-serif" font-size="7.5" letter-spacing="1">FOOTBALL</text>
+          </svg>
+        </div>
         <div class="logo-text">
           <span class="logo-name">EPRS</span>
-          <span class="logo-subtitle">Entente Petit-Réderching Siersthal</span>
+          <span class="logo-subtitle">Entente Petit-R&#233;derching Siersthal</span>
         </div>
       </div>
     </div>
@@ -33,58 +39,55 @@
   <main class="confirm-main">
     <div class="confirm-card">
 
-      <!-- Ballon rebondissant -->
       <div class="ball-wrapper">
         <div>
-          <span class="bouncing-ball" aria-hidden="true">⚽</span>
+          <span class="bouncing-ball" aria-hidden="true">&#9917;</span>
           <div class="ball-shadow"></div>
         </div>
       </div>
 
-      <h1 class="confirm-title">Demande envoyée ! 🎉</h1>
-      <p class="confirm-subtitle" id="confirmSubtitle">Merci&nbsp;! Guillaume vous recontactera très prochainement.</p>
+      <h1 class="confirm-title">Demande envoy&#233;e ! &#127881;</h1>
+      <p class="confirm-subtitle" id="confirmSubtitle">Merci&nbsp;! L&#39;&#233;ducateur responsable vous contactera tr&#232;s prochainement.</p>
 
-      <!-- Alerte mutation (affichée si catégorie U13+) -->
       <div class="confirm-mutation-alert" id="confirmMutation" style="display:none">
-        ⚠️ <strong>Rappel — Date limite de mutation :</strong>
-        Votre enfant est en catégorie <strong id="confirmCategorie"></strong>.
-        La date limite de dépôt du dossier de mutation est le <strong>15 juillet 2026</strong>.
-        Passé le 15 juillet 2026, votre dossier sera traité en mutation hors délai.
-        Cette procédure est plus contraignante : elle nécessite l'accord du club quitté
-        et est soumise à validation par le District. Nous vous conseillons vivement
-        de déposer votre demande avant cette date.
+        &#9888;&#65039; <strong>Rappel &#8212; Date limite de mutation :</strong>
+        <span id="confirmMutationText"></span>
+        La date limite de d&#233;p&#244;t du dossier de mutation est le <strong>15 juillet 2026</strong>.
+        Pass&#233; le 15 juillet 2026, votre dossier sera trait&#233; en mutation hors d&#233;lai.
+        Cette proc&#233;dure est plus contraignante&#160;: elle n&#233;cessite l&#39;accord du club quitt&#233;
+        et est soumise &#224; validation par le District. Nous vous conseillons vivement
+        de d&#233;poser votre demande avant cette date.
       </div>
 
-      <!-- Rappel des étapes -->
       <div class="confirm-steps" role="list">
         <div class="confirm-step" role="listitem">
           <div class="confirm-step-num" aria-hidden="true">1</div>
           <div>
             <strong>Licence FFF</strong><br>
-            Vous recevrez un email de la FFF à l'adresse indiquée pour valider la licence officielle de votre enfant.
+            <span id="confirmStep1Text">Vous recevrez un email de la FFF &#224; l&#39;adresse indiqu&#233;e pour valider la licence officielle de votre enfant.</span>
           </div>
         </div>
         <div class="confirm-step" role="listitem">
           <div class="confirm-step-num" aria-hidden="true">2</div>
           <div>
             <strong>Cotisation SportEasy</strong><br>
-            Si vous n'avez pas de compte, un email d'invitation vous sera envoyé. Le paiement s'effectue directement dans l'application.
+            Si vous n&#39;avez pas encore de compte, un email d&#39;invitation vous sera envoy&#233; pour en cr&#233;er un et r&#233;gler la cotisation en ligne.
           </div>
         </div>
         <div class="confirm-step" role="listitem">
           <div class="confirm-step-num" aria-hidden="true">3</div>
           <div>
-            <strong>Contact éducateur</strong><br>
-            L'éducateur responsable de la catégorie de votre enfant vous contactera directement.
+            <strong>Contact &#233;ducateur</strong><br>
+            L&#39;&#233;ducateur responsable de votre cat&#233;gorie vous contactera prochainement. N&#39;h&#233;sitez pas &#224; le contacter directement si vous n&#39;avez pas de nouvelles sous 48h.
           </div>
         </div>
       </div>
 
       <p class="confirm-signature">
-        Guillaume Sumann — Coordinateur jeunes EPRS
+        Guillaume Sumann &#8212; Coordinateur jeunes EPRS
       </p>
 
-      <a href="index.html" class="btn btn--home">← Retour à l'accueil</a>
+      <a href="index.html" class="btn btn--home">&#8592; Retour &#224; l&#39;accueil</a>
 
     </div>
   </main>
@@ -97,36 +100,51 @@
           <text x="30" y="36" text-anchor="middle" fill="white" font-family="Oswald,sans-serif" font-size="11" font-weight="700">EPRS</text>
         </svg>
         <div>
-          <p><strong>EPRS — Entente Petit-Réderching Siersthal</strong></p>
+          <p><strong>EPRS &#8212; Entente Petit-R&#233;derching Siersthal</strong></p>
           <p>Moselle, Grand Est</p>
         </div>
       </div>
-      <p class="footer-copy">© 2026 EPRS Football — Saison 2026/2027</p>
+      <p class="footer-copy">&#169; 2026 EPRS Football &#8212; Saison 2026/2027</p>
     </div>
   </footer>
 
   <script>
-    const MUTATION_CATS = ['U13', 'U15', 'U16', 'U17', 'Senior'];
+    var MUTATION_CATS = ['U13', 'U15', 'U16', 'U17', 'Senior'];
 
     (function () {
-      const raw = sessionStorage.getItem('eprs_registration');
+      var raw = sessionStorage.getItem('eprs_registration');
       if (!raw) return;
 
       try {
-        const data = JSON.parse(raw);
+        var data   = JSON.parse(raw);
+        var senior = (data.categorie === 'Senior');
 
-        if (data.prenomParent) {
-          document.getElementById('confirmSubtitle').textContent =
-            'Merci ' + data.prenomParent + ' ! Guillaume vous recontactera très prochainement.';
+        // Message principal
+        var subtitle = document.getElementById('confirmSubtitle');
+        if (senior && data.prenomJoueur) {
+          subtitle.textContent = "Merci " + data.prenomJoueur + " ! L'éducateur responsable vous contactera très prochainement.";
+        } else {
+          subtitle.textContent = "Merci ! L'éducateur responsable de votre enfant vous contactera très prochainement.";
         }
 
-        if (data.categorie && MUTATION_CATS.includes(data.categorie)) {
-          document.getElementById('confirmCategorie').textContent = data.categorie;
+        // Alerte mutation
+        if (data.categorie && MUTATION_CATS.indexOf(data.categorie) !== -1) {
+          var mutText = document.getElementById('confirmMutationText');
+          if (senior) {
+            mutText.innerHTML = "Vous êtes en catégorie <strong>" + data.categorie + "</strong>.";
+          } else {
+            mutText.innerHTML = "Votre enfant est en catégorie <strong>" + data.categorie + "</strong>.";
+          }
           document.getElementById('confirmMutation').style.display = 'block';
         }
-      } catch (e) {
-        // sessionStorage corrompue — on affiche la page par défaut
-      }
+
+        // Etape 1 : licence FFF
+        if (senior) {
+          document.getElementById('confirmStep1Text').textContent =
+            "Vous recevrez un email de la FFF pour valider votre licence officielle.";
+        }
+
+      } catch (e) {}
 
       sessionStorage.removeItem('eprs_registration');
     })();
