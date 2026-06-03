@@ -14,7 +14,7 @@ const CATEGORIES = {
   2012: 'U15', 2011: 'U15',
   2010: 'U16',
   2009: 'U17',
-  2008: 'Senior', 2007: 'Senior',
+  // 2008 et avant → Senior (fallback dans onDateChange/getCategory)
 };
 
 // Photo associée à chaque catégorie
@@ -29,10 +29,11 @@ const CATEGORY_IMAGES = {
   'Senior': 'images/seniors.jpg',
 };
 
-// Catégories soumises à la procédure de mutation (Seniors exclus)
-const MUTATION_CATEGORIES = ['U13', 'U15', 'U16', 'U17'];
+// Seules U7, U9, U11 sont exemptées de l'alerte mutation
+const MUTATION_CATEGORIES = ['U13', 'U15', 'U16', 'U17', 'Senior'];
 
 let currentStep = 1;
+let isSenior    = false; // true si catégorie Senior (né en 2008 ou avant)
 
 // ── Init ──
 document.addEventListener('DOMContentLoaded', function () {
@@ -94,7 +95,7 @@ document.addEventListener('DOMContentLoaded', function () {
     sessionStorage.setItem('eprs_registration', JSON.stringify({
       categorie,
       prenomJoueur: prenom,
-      prenomParent: val('prenomParent'),
+      prenomParent: isSenior ? prenom : val('prenomParent'), // email "Bonjour X"
       droitImage: droitImg,
       signature,
       dateSign,
@@ -115,7 +116,8 @@ function nextStep(n) {
   currentStep = n + 1;
   updateProgress(currentStep);
 
-  if (currentStep === 4) buildSummary();
+  if (currentStep === 2) updateStep2ForCategory();
+  if (currentStep === 4) { updateStep4ForCategory(); buildSummary(); }
   window.scrollTo({ top: document.querySelector('.form-card').offsetTop - 20, behavior: 'smooth' });
 }
 
@@ -125,6 +127,39 @@ function prevStep(n) {
   currentStep = n - 1;
   updateProgress(currentStep);
   window.scrollTo({ top: document.querySelector('.form-card').offsetTop - 20, behavior: 'smooth' });
+}
+
+// ── Adaptation étape 2 selon catégorie ──
+function updateStep2ForCategory() {
+  document.getElementById('step2Title').textContent =
+    isSenior ? 'Vos coordonnées' : 'Parent / Tuteur légal';
+
+  document.getElementById('labelNomParent').innerHTML =
+    (isSenior ? 'Votre nom' : 'Nom') + ' <span class="req" aria-hidden="true">*</span>';
+
+  document.getElementById('labelPrenomParent').innerHTML =
+    (isSenior ? 'Votre prénom' : 'Prénom') + ' <span class="req" aria-hidden="true">*</span>';
+
+  const lienGroup = document.getElementById('lienParentGroup');
+  lienGroup.hidden = isSenior;
+  if (isSenior) {
+    document.getElementById('lienParent').value = '';
+    clearError('lienParent');
+  }
+}
+
+// ── Adaptation étape 4 selon catégorie ──
+function updateStep4ForCategory() {
+  document.getElementById('legalTextMineur').hidden =  isSenior;
+  document.getElementById('legalTextSenior').hidden = !isSenior;
+
+  const droitLabel = isSenior ? 'de mes images' : 'des images de mon enfant';
+  document.getElementById('droitOuiLabel').textContent = droitLabel;
+  document.getElementById('droitNonLabel').textContent = droitLabel;
+
+  document.getElementById('refusalText').textContent = isSenior
+    ? 'votre inscription au club'
+    : 'l\'inscription de votre enfant au club';
 }
 
 function updateProgress(step) {
@@ -167,25 +202,25 @@ function onDateChange() {
     showError('dateNaissance', 'Cette date ne correspond à aucune catégorie. Contactez Guillaume directement.');
     return;
   }
-  if (year < 2007) {
-    display.hidden = true;
-    showError('dateNaissance', 'Cette date dépasse les catégories Senior. Contactez Guillaume directement.');
-    return;
-  }
 
-  const cat = CATEGORIES[year];
+  const cat = CATEGORIES[year] || 'Senior';
+  isSenior = (cat === 'Senior');
   badge.textContent = 'Catégorie : ' + cat;
   display.hidden = false;
 
   // Alerte mutation
   if (MUTATION_CATEGORIES.includes(cat)) {
+    const sujet = isSenior ? 'Vous êtes' : 'Votre enfant est';
     alert.innerHTML =
-      '⚠️ Votre enfant est en catégorie <strong>' + cat + '</strong>. ' +
+      '⚠️ ' + sujet + ' en catégorie <strong>' + cat + '</strong>. ' +
       'La date limite de mutation est le <strong>15 juillet 2025</strong>.';
     alert.hidden = false;
   } else {
     alert.hidden = true;
   }
+
+  // Message humoristique pour les Seniors nés en 1995 ou avant
+  document.getElementById('veteranHumor').hidden = (year > 1995);
 
   // Photo de la catégorie
   const imgSrc = CATEGORY_IMAGES[cat];
@@ -204,7 +239,7 @@ function getCategory() {
   const raw = val('dateNaissance');
   if (!raw) return null;
   const year = new Date(raw).getFullYear();
-  return CATEGORIES[year] || null;
+  return CATEGORIES[year] || 'Senior';
 }
 
 // ── Validation ──
@@ -222,9 +257,6 @@ function validateStep1() {
     const year = new Date(dateInput.value).getFullYear();
     if (year > 2020) {
       showError('dateNaissance', 'Cette date ne correspond à aucune catégorie. Contactez Guillaume directement.');
-      ok = false;
-    } else if (year < 2007) {
-      showError('dateNaissance', 'Cette date dépasse les catégories Senior. Contactez Guillaume directement.');
       ok = false;
     } else {
       clearError('dateNaissance');
@@ -260,17 +292,21 @@ function validateStep1() {
 function validateStep2() {
   let ok = true;
 
-  if (!notEmpty('nomParent',    'Le nom du parent est obligatoire.'))    ok = false;
-  if (!notEmpty('prenomParent', 'Le prénom du parent est obligatoire.')) ok = false;
+  const nomMsg    = isSenior ? 'Votre nom est obligatoire.'    : 'Le nom du parent est obligatoire.';
+  const prenomMsg = isSenior ? 'Votre prénom est obligatoire.' : 'Le prénom du parent est obligatoire.';
+  if (!notEmpty('nomParent',    nomMsg))    ok = false;
+  if (!notEmpty('prenomParent', prenomMsg)) ok = false;
 
-  const lien = document.getElementById('lienParent');
-  if (!lien.value) {
-    showError('lienParent', 'Veuillez sélectionner le lien avec le joueur.');
-    lien.classList.add('error');
-    ok = false;
-  } else {
-    clearError('lienParent');
-    lien.classList.remove('error');
+  if (!isSenior) {
+    const lien = document.getElementById('lienParent');
+    if (!lien.value) {
+      showError('lienParent', 'Veuillez sélectionner le lien avec le joueur.');
+      lien.classList.add('error');
+      ok = false;
+    } else {
+      clearError('lienParent');
+      lien.classList.remove('error');
+    }
   }
 
   const tel = val('telephone').replace(/[\s.\-]/g, '');
@@ -373,7 +409,10 @@ function buildSummary() {
     { label: 'Lieu de naissance',  value: val('villeNaissance') + ' (' + val('cpNaissance') + ')' },
     { label: 'Ville de résidence', value: val('villeResidence') },
     { label: 'Sexe',               value: (document.querySelector('input[name="sexe"]:checked') || {}).value || '—' },
-    { label: 'Parent / tuteur',    value: val('prenomParent') + ' ' + val('nomParent').toUpperCase() + ' (' + (val('lienParent') || '—') + ')' },
+    { label: isSenior ? 'Vos coordonnées' : 'Parent / tuteur',
+      value: isSenior
+        ? val('prenomParent') + ' ' + val('nomParent').toUpperCase()
+        : val('prenomParent') + ' ' + val('nomParent').toUpperCase() + ' (' + (val('lienParent') || '—') + ')' },
     { label: 'Téléphone',          value: val('telephone') },
     { label: 'Email',              value: val('email') },
     { label: 'Club 2024/2025',     value: clubAffiche },

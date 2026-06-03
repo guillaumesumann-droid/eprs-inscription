@@ -47,9 +47,12 @@
       <!-- Alerte mutation (affichée si catégorie U13+) -->
       <div class="confirm-mutation-alert" id="confirmMutation" style="display:none">
         ⚠️ <strong>Rappel — Date limite de mutation :</strong>
-        Si votre enfant rejoint l'EPRS depuis un autre club en catégorie
-        <strong id="confirmCategorie"></strong> ou supérieure, la date limite de dépôt
-        du dossier de mutation est le <strong>15 juillet 2025</strong>.
+        Votre enfant est en catégorie <strong id="confirmCategorie"></strong>.
+        La date limite de dépôt du dossier de mutation est le <strong>15 juillet 2025</strong>.
+        Passé le 15 juillet 2025, votre dossier sera traité en mutation hors délai.
+        Cette procédure est plus contraignante : elle nécessite l'accord du club quitté
+        et est soumise à validation par le District. Nous vous conseillons vivement
+        de déposer votre demande avant cette date.
       </div>
 
       <!-- Rappel des étapes -->
@@ -104,7 +107,7 @@
   </footer>
 
   <script>
-    const MUTATION_CATS = ['U13', 'U14', 'U15', 'U16'];
+    const MUTATION_CATS = ['U13', 'U15', 'U16', 'U17', 'Senior'];
 
     (function () {
       const raw = sessionStorage.getItem('eprs_registration');

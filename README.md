@@ -54,7 +54,7 @@ Merci et bienvenue dans la famille EPRS !
 
 3. Contact éducateur — Il reviendra vers vous rapidement pour confirmer l'intégration de {prenom_joueur} dans l'équipe.
 
-⚠️ Rappel si mutation : si votre enfant rejoint l'EPRS depuis un autre club en catégorie U13, U15, U16 ou U17, la date limite de mutation est le 15 juillet 2025.
+⚠️ Rappel si mutation : si votre enfant rejoint l'EPRS depuis un autre club en catégorie U13, U15, U16 ou U17, la date limite de mutation est le 15 juillet 2025. Passé le 15 juillet 2025, votre dossier sera traité en mutation hors délai. Cette procédure est plus contraignante : elle nécessite l'accord du club quitté et est soumise à validation par le District. Nous vous conseillons vivement de déposer votre demande avant cette date.
 
 📸 Droit à l'image : {droit_image}
 ✍️ Signé électroniquement par : {signature_electronique}
@@ -181,7 +181,7 @@ eprs-inscription/
     ├── u15.jpg         → Photo catégorie U15
     ├── u16.jpg         → Photo catégorie U16
     ├── u17.jpg         → Photo catégorie U17
-    └── seniors.jpg     → Photo équipe Senior
+    └── seniors.jpg     → Photo équipe Senior (utilisée pour tous les Seniors)
 ```
 
 > **Note images :** Si un fichier image est absent, un placeholder bleu/rouge "📷 Photo à venir" s'affiche automatiquement grâce au mécanisme `onerror` HTML. Les images sont donc optionnelles au lancement.

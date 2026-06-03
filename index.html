@@ -45,10 +45,15 @@
     <section class="hero">
       <div class="hero-bg">
         <img src="images/hero.jpg"
-             class="hero-bg-img"
+             class="hero-bg-img hero-bg-img--1"
              alt=""
              aria-hidden="true"
-             onerror="this.closest('.hero-bg').classList.add('hero-bg--fallback')">
+             onerror="this.style.display='none'">
+        <img src="images/hero2.jpg"
+             class="hero-bg-img hero-bg-img--2"
+             alt=""
+             aria-hidden="true"
+             onerror="this.style.display='none'">
       </div>
       <div class="hero-overlay" aria-hidden="true"></div>
       <div class="container hero-content">
@@ -69,8 +74,8 @@
         <div class="alert alert--warning">
           <span class="alert-icon" aria-hidden="true">⚠️</span>
           <div class="alert-body">
-            <strong>DATE LIMITE — MUTATIONS U13 / U15 / U16 / U17</strong>
-            <p>Si votre enfant rejoint l'EPRS depuis un autre club et évolue en catégorie U13, U15, U16 ou U17, la date limite de dépôt du dossier de mutation est fixée au <strong>15 juillet 2025</strong>. Passé cette date, la demande ne pourra plus être traitée pour cette saison. (Catégories U7, U9, U11 et Senior non concernées.)</p>
+            <strong>DATE LIMITE — MUTATIONS (toutes catégories sauf U7, U9, U11)</strong>
+            <p>Si vous rejoignez l'EPRS depuis un autre club en catégorie U13, U15, U16, U17 ou Senior, la date limite de dépôt du dossier de mutation est fixée au <strong>15 juillet 2025</strong>. Passé le 15 juillet 2025, votre dossier sera traité en mutation hors délai. Cette procédure est plus contraignante : elle nécessite l'accord du club quitté et est soumise à validation par le District. Nous vous conseillons vivement de déposer votre demande avant cette date. (Catégories U7, U9, U11 non concernées.)</p>
           </div>
         </div>
       </div>
@@ -158,11 +163,19 @@
 
               <div class="field-group">
                 <label for="dateNaissance">Date de naissance <span class="req" aria-hidden="true">*</span></label>
-                <input type="date" id="dateNaissance" name="date_naissance" min="2007-01-01" max="2020-12-31" aria-required="true">
+                <input type="date" id="dateNaissance" name="date_naissance" max="2020-12-31" aria-required="true">
                 <div class="field-error" id="err_dateNaissance" role="alert"></div>
                 <div id="categoryDisplay" class="category-display" aria-live="polite" hidden>
                   <span class="category-badge" id="categoryBadge"></span>
                   <div class="mutation-alert" id="mutationAlert" hidden></div>
+                  <!-- Message humoristique pour les Seniors nés en 1995 ou avant -->
+                  <div class="veteran-humor" id="veteranHumor" hidden>
+                    🦴 Bienvenue chez les Seniors expérimentés !
+                    On est ravis de vous accueillir… et votre kiné aussi.
+                    Pensez à prévenir votre médecin, à prévoir du baume du tigre
+                    et à ne pas oublier votre carnet de mutuelle.
+                    On rigole — mais échauffez-vous bien quand même ! 💪
+                  </div>
                   <!-- Photo de la catégorie -->
                   <div class="cat-photo-wrapper" id="catPhotoWrapper">
                     <img class="cat-photo" id="catPhoto" src="" alt=""
@@ -219,22 +232,22 @@
 
             <!-- ════════════ ÉTAPE 2 — PARENT ════════════ -->
             <div class="form-step" id="step2">
-              <h2 class="step-heading">Parent / Tuteur légal</h2>
+              <h2 class="step-heading" id="step2Title">Parent / Tuteur légal</h2>
 
               <div class="field-row">
                 <div class="field-group">
-                  <label for="nomParent">Nom <span class="req" aria-hidden="true">*</span></label>
+                  <label for="nomParent" id="labelNomParent">Nom <span class="req" aria-hidden="true">*</span></label>
                   <input type="text" id="nomParent" name="nom_parent" aria-required="true">
                   <div class="field-error" id="err_nomParent" role="alert"></div>
                 </div>
                 <div class="field-group">
-                  <label for="prenomParent">Prénom <span class="req" aria-hidden="true">*</span></label>
+                  <label for="prenomParent" id="labelPrenomParent">Prénom <span class="req" aria-hidden="true">*</span></label>
                   <input type="text" id="prenomParent" name="prenom_parent" aria-required="true">
                   <div class="field-error" id="err_prenomParent" role="alert"></div>
                 </div>
               </div>
 
-              <div class="field-group">
+              <div class="field-group" id="lienParentGroup">
                 <label for="lienParent">Lien avec le joueur <span class="req" aria-hidden="true">*</span></label>
                 <select id="lienParent" name="lien_parent" aria-required="true">
                   <option value="">— Choisissez —</option>
@@ -356,8 +369,20 @@
               <div class="image-rights-section">
                 <h3 class="image-rights-title">📸 Autorisation de droit à l'image</h3>
 
-                <div class="legal-text" tabindex="0" role="region" aria-label="Texte légal droit à l'image">
+                <!-- Texte légal mineur (parent/tuteur) — masqué si Senior -->
+                <div class="legal-text" id="legalTextMineur" tabindex="0" role="region" aria-label="Texte légal droit à l'image — mineur">
                   <p>Je soussigné(e), représentant(e) légal(e) du joueur mentionné dans ce formulaire, autorise / n'autorise pas l'<strong>EPRS (Entente Petit-Réderching Siersthal)</strong> à utiliser les photographies et vidéos sur lesquelles apparaît mon enfant, dans le cadre des activités du club.</p>
+                  <p style="margin-top:0.6rem">Ces images pourront être utilisées sur les supports suivants :</p>
+                  <ul>
+                    <li>Site internet et réseaux sociaux du club (Facebook, Instagram)</li>
+                    <li>Supports de communication internes (affiches, programmes)</li>
+                    <li>Presse locale sportive</li>
+                  </ul>
+                  <p style="margin-top:0.6rem">Cette autorisation est accordée à titre gratuit pour la durée de la <strong>saison 2025/2026</strong>. Elle peut être révoquée à tout moment par écrit auprès du responsable du club.</p>
+                </div>
+                <!-- Texte légal Senior — masqué si mineur -->
+                <div class="legal-text" id="legalTextSenior" tabindex="0" role="region" aria-label="Texte légal droit à l'image — Senior" hidden>
+                  <p>Je soussigné(e), autorise / n'autorise pas l'<strong>EPRS (Entente Petit-Réderching Siersthal)</strong> à utiliser les photographies et vidéos sur lesquelles j'apparais, dans le cadre des activités du club.</p>
                   <p style="margin-top:0.6rem">Ces images pourront être utilisées sur les supports suivants :</p>
                   <ul>
                     <li>Site internet et réseaux sociaux du club (Facebook, Instagram)</li>
@@ -373,16 +398,16 @@
                     <div class="radio-group radio-group--column">
                       <label class="radio-option radio-option--green">
                         <input type="radio" name="droit_image" value="Autorisé" id="droitOui">
-                        <span class="radio-btn">✅ J'AUTORISE la diffusion des images de mon enfant</span>
+                        <span class="radio-btn">✅ J'AUTORISE la diffusion <span id="droitOuiLabel">des images de mon enfant</span></span>
                       </label>
                       <label class="radio-option radio-option--red">
                         <input type="radio" name="droit_image" value="Non autorisé" id="droitNon">
-                        <span class="radio-btn">❌ Je N'AUTORISE PAS la diffusion des images de mon enfant</span>
+                        <span class="radio-btn">❌ Je N'AUTORISE PAS la diffusion <span id="droitNonLabel">des images de mon enfant</span></span>
                       </label>
                     </div>
                   </fieldset>
                   <div class="info-bubble" id="refusalBubble" hidden>
-                    💙 Votre choix est respecté et noté. Cela n'affecte pas l'inscription de votre enfant au club.
+                    💙 Votre choix est respecté et noté. Cela n'affecte pas <span id="refusalText">l'inscription de votre enfant au club</span>.
                   </div>
                   <div class="field-error" id="err_droitImage" role="alert"></div>
                 </div>
