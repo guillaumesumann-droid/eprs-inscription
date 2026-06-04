@@ -153,6 +153,14 @@ document.addEventListener('DOMContentLoaded', function () {
         nom_educateur: educateur.nom,
         tel_educateur: educateur.tel,
       };
+      console.log("EmailJS templateParams:", {
+        email:         templateParams.email,
+        prenom_parent: templateParams.prenom_parent,
+        prenom_joueur: templateParams.prenom_joueur,
+        categorie:     templateParams.categorie,
+        nom_educateur: templateParams.nom_educateur,
+        tel_educateur: templateParams.tel_educateur,
+      });
       emailjs.send('service_p7jxxvn', '8mwemee', templateParams)
         .then(function () { console.log('Mail envoyé'); })
         .catch(function (err) { console.error('Erreur mail:', err); });
