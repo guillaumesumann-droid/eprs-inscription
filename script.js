@@ -170,6 +170,7 @@ function nextStep(n) {
   updateProgress(currentStep);
 
   if (currentStep === 2) updateStep2ForCategory();
+  if (currentStep === 3) updateEducateurDisplay(getCategory());
   if (currentStep === 4) { updateStep4ForCategory(); buildSummary(); }
   window.scrollTo({ top: document.querySelector('.form-card').offsetTop - 20, behavior: 'smooth' });
 }
