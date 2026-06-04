@@ -128,20 +128,19 @@ document.addEventListener('DOMContentLoaded', function () {
       if (!res.ok) throw new Error('Formspree ' + res.status);
 
       // ── 2. EmailJS (fire-and-forget, ne bloque pas la redirect) ──
-      var email = document.getElementById('email').value;
+      var educateur = EDUCATEURS[categorie] || { nom: 'À définir', tel: 'À définir' };
       var templateParams = {
-        email:          email,
-        prenom_parent:  prenomContact,
-        prenom_joueur:  prenom,
+        email:          document.getElementById('email').value,
+        prenom_parent:  document.getElementById('prenomParent').value,
+        prenom_joueur:  document.getElementById('prenomJoueur').value,
         categorie:      categorie,
-        nom_educateur:  document.getElementById('fieldNomEducateur').value,
-        tel_educateur:  document.getElementById('fieldTelEducateur').value,
+        nom_educateur:  educateur.nom,
+        tel_educateur:  educateur.tel,
       };
       emailjs.send('service_p7jxxvn', '8mwemee', templateParams).then(function () {
-        console.log('EmailJS envoyé');
-      }).catch(function (err) {
-        console.log('EmailJS erreur', err);
-        console.error('EmailJS:', err);
+        console.log('EmailJS envoyé avec succès');
+      }).catch(function (error) {
+        console.error('EmailJS erreur:', error);
       });
 
       // ── 3. Redirect vers page confirmation ──
