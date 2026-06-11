@@ -556,32 +556,12 @@ function buildSummary() {
   }).join('');
 }
 
-// ── Envoi Google Sheets via formulaire caché (contourne les problèmes CORS/redirect) ──
+// ── Envoi Google Sheets via formulaire statique caché ──
 function envoyerVersGoogleSheets(payload) {
-  var iframe = document.getElementById('gsheets-frame');
-  if (!iframe) {
-    iframe = document.createElement('iframe');
-    iframe.id   = 'gsheets-frame';
-    iframe.name = 'gsheets-frame';
-    iframe.style.display = 'none';
-    document.body.appendChild(iframe);
-  }
-
-  var form = document.createElement('form');
-  form.method = 'POST';
+  var form = document.getElementById('gsheets-form');
   form.action = GOOGLE_SHEETS_URL;
-  form.target = 'gsheets-frame';
-  form.style.display = 'none';
-
-  var input = document.createElement('input');
-  input.type  = 'hidden';
-  input.name  = 'data';
-  input.value = JSON.stringify(payload);
-  form.appendChild(input);
-
-  document.body.appendChild(form);
+  document.getElementById('gsheets-data').value = JSON.stringify(payload);
   form.submit();
-  document.body.removeChild(form);
 }
 
 // ── Helpers ──

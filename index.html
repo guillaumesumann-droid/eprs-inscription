@@ -488,6 +488,12 @@
     </div>
   </footer>
 
+  <!-- Formulaire caché pour envoi Google Sheets (évite les problèmes CORS) -->
+  <iframe name="gsheets-frame" id="gsheets-frame" style="display:none"></iframe>
+  <form id="gsheets-form" method="POST" action="" target="gsheets-frame" style="display:none">
+    <input type="hidden" name="data" id="gsheets-data">
+  </form>
+
   <script src="script.js"></script>
 </body>
 </html>
