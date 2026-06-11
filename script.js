@@ -3,32 +3,8 @@
    script.js
    ============================================= */
 
-// URL de soumission Google Forms — remplacer FORM_ID par l'identifiant du formulaire
-const GOOGLE_FORMS_URL = "https://docs.google.com/forms/d/e/REMPLACER_PAR_FORM_ID/formResponse";
-
-// Entry IDs des champs Google Forms — récupérés via Inspecter sur l'aperçu du formulaire
-const GOOGLE_FORMS_ENTRIES = {
-  nom_joueur:         "entry.XXXXXXXXX",
-  prenom_joueur:      "entry.XXXXXXXXX",
-  date_naissance:     "entry.XXXXXXXXX",
-  ville_naissance:    "entry.XXXXXXXXX",
-  ville_residence:    "entry.XXXXXXXXX",
-  sexe:               "entry.XXXXXXXXX",
-  nom_parent:         "entry.XXXXXXXXX",
-  prenom_parent:      "entry.XXXXXXXXX",
-  lien_parent:        "entry.XXXXXXXXX",
-  telephone:          "entry.XXXXXXXXX",
-  email:              "entry.XXXXXXXXX",
-  club_saison:        "entry.XXXXXXXXX",
-  nom_club_precedent: "entry.XXXXXXXXX",
-  commentaire:        "entry.XXXXXXXXX",
-  droit_image:        "entry.XXXXXXXXX",
-  signature:          "entry.XXXXXXXXX",
-  date_signature:     "entry.XXXXXXXXX",
-  categorie:          "entry.XXXXXXXXX",
-  nom_educateur:      "entry.XXXXXXXXX",
-  tel_educateur:      "entry.XXXXXXXXX",
-};
+// Google Sheets via Apps Script
+const GOOGLE_SHEETS_URL = "https://script.google.com/macros/s/AKfycbxmK_DxYFlRC10KVhhuQ_uakAuiF2GdEoM4n4gI_8jJKtOR_QBMQCbKLQs1DvQWnp-qSw/exec";
 
 // 15 juillet 2026 à 23h59 heure de Paris (CEST = UTC+2)
 const MUTATION_DEADLINE = new Date('2026-07-15T23:59:00+02:00');
@@ -165,31 +141,36 @@ document.addEventListener('DOMContentLoaded', function () {
       tel_educateur: educateur.tel,
     };
 
-    // ── 1. Google Forms (fire-and-forget, no-cors) ──
-    var gData = new FormData();
-    gData.append(GOOGLE_FORMS_ENTRIES.nom_joueur,         val('nomJoueur'));
-    gData.append(GOOGLE_FORMS_ENTRIES.prenom_joueur,      val('prenom_joueur'));
-    gData.append(GOOGLE_FORMS_ENTRIES.date_naissance,     val('dateNaissance'));
-    gData.append(GOOGLE_FORMS_ENTRIES.ville_naissance,    val('villeNaissance'));
-    gData.append(GOOGLE_FORMS_ENTRIES.ville_residence,    val('villeResidence'));
-    gData.append(GOOGLE_FORMS_ENTRIES.sexe,               (document.querySelector('input[name="sexe"]:checked') || {}).value || '');
-    gData.append(GOOGLE_FORMS_ENTRIES.nom_parent,         val('nomParent'));
-    gData.append(GOOGLE_FORMS_ENTRIES.prenom_parent,      val('prenom_parent'));
-    gData.append(GOOGLE_FORMS_ENTRIES.lien_parent,        val('lienParent'));
-    gData.append(GOOGLE_FORMS_ENTRIES.telephone,          val('telephone'));
-    gData.append(GOOGLE_FORMS_ENTRIES.email,              formData.email);
-    gData.append(GOOGLE_FORMS_ENTRIES.club_saison,        val('clubSaison'));
-    gData.append(GOOGLE_FORMS_ENTRIES.nom_club_precedent, val('nomClub'));
-    gData.append(GOOGLE_FORMS_ENTRIES.commentaire,        val('commentaire'));
-    gData.append(GOOGLE_FORMS_ENTRIES.droit_image,        (document.querySelector('input[name="droit_image"]:checked') || {}).value || '');
-    gData.append(GOOGLE_FORMS_ENTRIES.signature,          val('signatureElec'));
-    gData.append(GOOGLE_FORMS_ENTRIES.date_signature,     document.getElementById('fieldDateSign').value);
-    gData.append(GOOGLE_FORMS_ENTRIES.categorie,          formData.categorie);
-    gData.append(GOOGLE_FORMS_ENTRIES.nom_educateur,      educateur.nom);
-    gData.append(GOOGLE_FORMS_ENTRIES.tel_educateur,      educateur.tel);
+    // ── 1. Google Sheets via Apps Script (fire-and-forget, no-cors) ──
+    var payload = {
+      nom_joueur:         val('nomJoueur'),
+      prenom_joueur:      val('prenom_joueur'),
+      date_naissance:     val('dateNaissance'),
+      ville_naissance:    val('villeNaissance'),
+      ville_residence:    val('villeResidence'),
+      sexe:               (document.querySelector('input[name="sexe"]:checked') || {}).value || '',
+      nom_parent:         val('nomParent'),
+      prenom_parent:      val('prenom_parent'),
+      lien_parent:        val('lienParent'),
+      telephone:          val('telephone'),
+      email:              formData.email,
+      club_saison:        val('clubSaison'),
+      nom_club_precedent: val('nomClub'),
+      commentaire:        val('commentaire'),
+      droit_image:        (document.querySelector('input[name="droit_image"]:checked') || {}).value || '',
+      signature:          val('signatureElec'),
+      date_signature:     document.getElementById('fieldDateSign').value,
+      categorie:          formData.categorie,
+      nom_educateur:      educateur.nom,
+      tel_educateur:      educateur.tel,
+    };
 
-    fetch(GOOGLE_FORMS_URL, { method: 'POST', mode: 'no-cors', body: gData })
-      .catch(function (err) { console.error('Google Forms:', err); });
+    fetch(GOOGLE_SHEETS_URL, {
+      method:  'POST',
+      mode:    'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify(payload),
+    }).catch(function (err) { console.error('Google Sheets:', err); });
 
     // ── 2. EmailJS — email de confirmation au parent (fire-and-forget) ──
     emailjs.send('service_p7jxxvn', '8mwemee', templateParams)
