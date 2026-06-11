@@ -3,7 +3,7 @@
    script.js
    ============================================= */
 
-const MAKE_WEBHOOK_URL = "https://hook.eu1.make.com/dtwh31l3g7g8pzktlhuamv94acnvhrkv";
+const MAKE_WEBHOOK_URL = "https://hook.eu1.make.com/1171ryrtij32o5qejqts591v5pxo4vr7";
 
 // 15 juillet 2026 à 23h59 heure de Paris (CEST = UTC+2)
 const MUTATION_DEADLINE = new Date('2026-07-15T23:59:00+02:00');
