@@ -2,8 +2,8 @@
 // Google Apps Script — Extensions > Apps Script du Google Sheet
 // Déployer : Application web / Exécuter en tant que "Moi" / Accès "Tout le monde"
 
-var SHEET_NAME          = 'Inscriptions';
-var EMAIL_COORDINATEUR  = 'guillaume.sumann@gmail.com';
+var SHEET_NAME         = 'Inscriptions';
+var EMAIL_COORDINATEUR = 'guillaume.sumann@gmail.com';
 
 var HEADERS = [
   'Date',
@@ -15,10 +15,29 @@ var HEADERS = [
   'Catégorie', 'Éducateur', 'Tél éducateur',
 ];
 
+// Point d'entrée GET (utilisé par le formulaire HTML via no-cors)
+function doGet(e) {
+  if (e && e.parameter && e.parameter.data) {
+    return traiterInscription(e.parameter.data);
+  }
+  // Appel direct sans données = vérification que le script tourne
+  return ContentService.createTextOutput('EPRS Inscriptions — Apps Script actif');
+}
+
+// Point d'entrée POST (fallback)
 function doPost(e) {
+  var raw = (e && e.parameter && e.parameter.data)
+         || (e && e.postData  && e.postData.contents);
+  if (raw) return traiterInscription(raw);
+  return ContentService
+    .createTextOutput(JSON.stringify({ result: 'error', message: 'no data' }))
+    .setMimeType(ContentService.MimeType.JSON);
+}
+
+function traiterInscription(rawData) {
   try {
     var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(SHEET_NAME);
-    var data  = JSON.parse(e.parameter.data);
+    var data  = JSON.parse(rawData);
 
     if (sheet.getLastRow() === 0) {
       sheet.appendRow(HEADERS);
@@ -50,10 +69,8 @@ function doPost(e) {
       data.tel_educateur      || '',
     ]);
 
-    // Notification à Guillaume
     envoyerNotificationCoordinateur(data);
 
-    // Confirmation au parent (ou au joueur si Senior)
     if (data.email) {
       envoyerConfirmationParent(data);
     }
@@ -65,7 +82,7 @@ function doPost(e) {
   } catch (err) {
     MailApp.sendEmail(EMAIL_COORDINATEUR,
       '⚠️ Erreur inscription EPRS',
-      'Erreur lors du traitement d\'une inscription :\n\n' + err.toString()
+      'Erreur :\n\n' + err.toString() + '\n\nDonnées reçues :\n' + rawData
     );
     return ContentService
       .createTextOutput(JSON.stringify({ result: 'error', message: err.toString() }))
@@ -75,7 +92,6 @@ function doPost(e) {
 
 function envoyerNotificationCoordinateur(data) {
   var sujet = '⚽ Nouvelle inscription EPRS — ' + data.prenom_joueur + ' ' + (data.nom_joueur || '').toUpperCase();
-
   var corps =
     'Nouvelle demande d\'inscription reçue.\n\n' +
     '👤 JOUEUR\n' +
@@ -91,10 +107,8 @@ function envoyerNotificationCoordinateur(data) {
     'Email : ' + data.email + '\n\n' +
     '🏟️ CLUB PRÉCÉDENT\n' +
     data.club_saison + (data.nom_club_precedent ? ' — ' + data.nom_club_precedent : '') + '\n\n' +
-    '📸 DROIT À L\'IMAGE\n' +
-    data.droit_image + '\n\n' +
-    '✍️ SIGNATURE\n' +
-    data.signature + ' — ' + data.date_signature +
+    '📸 DROIT À L\'IMAGE : ' + data.droit_image + '\n\n' +
+    '✍️ SIGNATURE : ' + data.signature + ' — ' + data.date_signature +
     (data.commentaire ? '\n\n💬 COMMENTAIRE\n' + data.commentaire : '');
 
   MailApp.sendEmail(EMAIL_COORDINATEUR, sujet, corps);
@@ -103,7 +117,6 @@ function envoyerNotificationCoordinateur(data) {
 function envoyerConfirmationParent(data) {
   var prenomContact = data.prenom_parent || data.prenom_joueur;
   var sujet = '✅ Demande d\'inscription EPRS 2026/2027 reçue — ' + data.prenom_joueur;
-
   var corps =
     'Bonjour ' + prenomContact + ',\n\n' +
     'Nous avons bien reçu la demande d\'inscription de ' + data.prenom_joueur + ' pour la saison 2026/2027.\n' +
@@ -125,8 +138,4 @@ function envoyerConfirmationParent(data) {
     '📱 06 76 93 73 28';
 
   MailApp.sendEmail(data.email, sujet, corps);
-}
-
-function doGet() {
-  return ContentService.createTextOutput('EPRS Inscriptions — Apps Script actif');
 }

@@ -165,13 +165,9 @@ document.addEventListener('DOMContentLoaded', function () {
       tel_educateur:      educateur.tel,
     };
 
-    var formBody = new URLSearchParams();
-    formBody.append('data', JSON.stringify(payload));
-    fetch(GOOGLE_SHEETS_URL, {
-      method: 'POST',
-      mode:   'no-cors',
-      body:   formBody,
-    }).catch(function (err) { console.error('Google Sheets:', err); });
+    var sheetsUrl = GOOGLE_SHEETS_URL + '?data=' + encodeURIComponent(JSON.stringify(payload));
+    fetch(sheetsUrl, { mode: 'no-cors' })
+      .catch(function (err) { console.error('Google Sheets:', err); });
 
     // ── 2. Make.com webhook (fire-and-forget) ──
     fetch("https://hook.eu1.make.com/dtwh31l3g7g8pzktlhuamv94acnvhrkv", {
