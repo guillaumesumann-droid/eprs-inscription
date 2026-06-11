@@ -173,12 +173,7 @@ document.addEventListener('DOMContentLoaded', function () {
       body:   formBody,
     }).catch(function (err) { console.error('Google Sheets:', err); });
 
-    // ── 2. EmailJS — email de confirmation au parent (fire-and-forget) ──
-    emailjs.send('service_p7jxxvn', '8mwemee', templateParams)
-      .then(function () { console.log('Mail envoyé'); })
-      .catch(function (err) { console.error('Erreur mail:', err); });
-
-    // ── 3. Make.com webhook (fire-and-forget) ──
+    // ── 2. Make.com webhook (fire-and-forget) ──
     fetch("https://hook.eu1.make.com/dtwh31l3g7g8pzktlhuamv94acnvhrkv", {
       method:  'POST',
       headers: { 'Content-Type': 'application/json' },
