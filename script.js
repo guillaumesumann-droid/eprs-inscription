@@ -156,14 +156,17 @@ document.addEventListener('DOMContentLoaded', function () {
       tel_educateur:      educateur.tel,
     };
 
+    // ── Envoi Make.com puis redirect (on attend la réponse avant de naviguer) ──
+    var redirectUrl = document.getElementById('fieldNext').value;
     fetch(MAKE_WEBHOOK_URL, {
       method:  'POST',
       headers: { 'Content-Type': 'application/json' },
       body:    JSON.stringify(payload),
-    }).catch(function (err) { console.error('Make webhook:', err); });
-
-    // ── 4. Redirect vers page confirmation ──
-    window.location.href = document.getElementById('fieldNext').value;
+    })
+    .catch(function (err) { console.error('Make webhook:', err); })
+    .finally(function () {
+      window.location.href = redirectUrl;
+    });
   });
 });
 
