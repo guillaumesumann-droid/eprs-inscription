@@ -165,11 +165,12 @@ document.addEventListener('DOMContentLoaded', function () {
       tel_educateur:      educateur.tel,
     };
 
+    var formBody = new URLSearchParams();
+    formBody.append('data', JSON.stringify(payload));
     fetch(GOOGLE_SHEETS_URL, {
-      method:  'POST',
-      mode:    'no-cors',
-      headers: { 'Content-Type': 'application/json' },
-      body:    JSON.stringify(payload),
+      method: 'POST',
+      mode:   'no-cors',
+      body:   formBody,
     }).catch(function (err) { console.error('Google Sheets:', err); });
 
     // ── 2. EmailJS — email de confirmation au parent (fire-and-forget) ──

@@ -17,7 +17,7 @@ var HEADERS = [
 function doPost(e) {
   try {
     var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(SHEET_NAME);
-    var data  = JSON.parse(e.postData.contents);
+    var data  = JSON.parse(e.parameter.data);
 
     // Crée la ligne d'en-têtes si la feuille est vide
     if (sheet.getLastRow() === 0) {
